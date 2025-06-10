@@ -1,0 +1,3 @@
+export function Products() {
+  return <h2>Welcome to the Products Page!</h2>;
+}
