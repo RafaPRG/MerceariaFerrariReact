@@ -10,7 +10,7 @@ import {
   CategoryCard,
   CategoryTitle,
   CategoryImage
-} from "./MainContent.ts";
+} from "./styles.ts";
 import fachada from "../../assets/images/FaixadaDaMercearia.jpg";
 import cerveja from "../../assets/images/Itaipava.png";
 import produtosGerais from "../../assets/images/ProdutosDoDia.png";

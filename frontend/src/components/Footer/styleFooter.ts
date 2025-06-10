@@ -17,6 +17,7 @@ export const Info = styled.div`
   h4 {
     margin-bottom: 10px;
     color: #7c4f1d;
+    text-align: center;
   }
 
   p {
@@ -41,6 +42,7 @@ export const Location = styled.div`
   h4 {
     margin-bottom: 10px;
     color: #7c4f1d;
+    text-align: center;
   }
 
   iframe {

@@ -6,6 +6,7 @@ export const Main = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow-x: hidden;
 `;
 
 export const Card = styled.section`

@@ -27,7 +27,7 @@ export function Footer() {
       <Location>
         <h4>Localização</h4>
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3717.4653006981373!2d-45.70521188507763!3d-21.12457728594598!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94c9c7a73c395eff%3A0x34707c84f6c14a06!2sMercearia%20Ferrari!5e0!3m2!1spt-BR!2sbr!4v1717895787275"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7421.782050016417!2d-45.431165!3d-21.551115999999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ca928b2d89e2fd%3A0x5903a63559125668!2sMercearia%20Ferrari!5e0!3m2!1spt-BR!2sbr!4v1749569611897!5m2!1spt-BR!2sbr"
           width="300"
           height="200"
           allowFullScreen
