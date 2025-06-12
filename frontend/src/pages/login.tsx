@@ -59,6 +59,7 @@ export function Login() {
             autoComplete="username"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            aria-label="Email"
           />
         </Fieldset>
 
@@ -72,6 +73,7 @@ export function Login() {
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            aria-label="Senha"
           />
         </Fieldset>
 
