@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./frontend
+        working-directory: .
 
     steps:
       - name: Checkout do código
@@ -25,7 +25,7 @@ jobs:
         run: npm install
 
       - name: Rodar os testes
-        run: npm run test -- --coverage
+        run: npm run test
 
   deploy:
     runs-on: ubuntu-latest
@@ -33,6 +33,9 @@ jobs:
     if: success()
 
     steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
       - name: Deploy para Vercel
         uses: amondnet/vercel-action@v20
         with:
@@ -40,4 +43,4 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: "--prod"
-          working-directory: ./frontend
+          working-directory: .
