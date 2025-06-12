@@ -92,7 +92,7 @@ export function Login() {
         </EnterButton>
 
         <SignupText>
-          É novo por aqui? <StyledLink to="/cadastro">Cadastre-se</StyledLink>
+          É novo por aqui? <StyledLink to="">Cadastre-se</StyledLink>
         </SignupText>
 
         <BackLink to="/">&larr; Voltar</BackLink>

@@ -50,7 +50,7 @@ export function Header() {
         ) : (
           <AuthButtons>
             <AuthButton to="/login">ENTRAR</AuthButton>
-            <AuthButton to="/cadastro">CADASTRAR</AuthButton>
+            <AuthButton to="">CADASTRAR</AuthButton>
           </AuthButtons>
         )}
       </HeaderContainer>
