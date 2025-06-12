@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const FooterContainer = styled.footer`
   width: 100%;
   background-color: #f6f1e5;
-  padding: 40px 20px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;

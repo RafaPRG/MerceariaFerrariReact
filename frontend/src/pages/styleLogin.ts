@@ -5,7 +5,7 @@ export const Container = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 8%;
   background: #f6c6a7;
 `;
 

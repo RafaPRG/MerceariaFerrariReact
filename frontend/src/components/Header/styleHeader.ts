@@ -5,12 +5,10 @@ export const HeaderWrapper = styled.header`
   width: 100%;
   background-color: #f7f3e9;
   border-bottom: 2px solid #d2a27e;
-  padding: 0.5rem 1rem;
 `;
 
 export const HeaderContainer = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
+  margin: 0;
   padding: 0.5rem 1;
   display: flex;
   align-items: center;
