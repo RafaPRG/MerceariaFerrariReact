@@ -13,10 +13,11 @@ const renderWithAuth = (isAuthenticated: boolean) => {
       value={{
         isAuthenticated,
         currentUser: null,
-        login: () => true,
+        login: async () => true,
         logout: () => {},
-        toggleFavorite: () => {},
+        toggleFavorite: async () => {},
         isFavorite: () => false,
+        loading: false,
       }}
     >
       <MemoryRouter initialEntries={["/protegido"]}>

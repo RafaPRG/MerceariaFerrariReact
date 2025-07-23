@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { screen, fireEvent, render } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { RecuperarSenha } from "../pages/recuperarSenha";
-import { mockUsers } from "../mocks/userMock";
 
 vi.mock("react-router-dom", async () => {
   const actual = await vi.importActual("react-router-dom");
@@ -14,8 +13,7 @@ vi.mock("react-router-dom", async () => {
 
 describe("RecuperarSenha", () => {
   beforeEach(() => {
-    const user = mockUsers.find((u) => u.email === "admin@merceariaferrari.com");
-    if (user) user.password = "admin123";
+    // Setup inicial se necessário
   });
 
   it("renderiza os campos corretamente", () => {

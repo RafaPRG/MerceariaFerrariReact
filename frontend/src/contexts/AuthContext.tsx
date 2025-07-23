@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 import type { UserProps } from "../types/userType";
 import { authService } from "../services/authService";
-import { favoriteService, type Favorite } from "../services/favoriteService";
+import { favoriteService } from "../services/favoriteService";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -19,7 +19,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState<UserProps | null>(null);
   const [loading, setLoading] = useState(true);
-  const [favorites, setFavorites] = useState<Favorite[]>([]);
 
   useEffect(() => {
     const initAuth = async () => {
@@ -35,7 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           // Carregar favoritos do backend
           try {
             const userFavorites = await favoriteService.getUserFavorites();
-            setFavorites(userFavorites);
+
             
             // Atualizar dados do usuário com favoritos
             const favoriteIds = userFavorites.map(f => f.produto_id);
@@ -68,17 +67,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         name: response.user.nome,
         email: response.user.email,
         role: response.user.tipo,
-        favorites: []
+        favorites: [] as string[]
       };
       
       // Buscar favoritos do usuário
       try {
         const userFavorites = await favoriteService.getUserFavorites();
         user.favorites = userFavorites.map(f => f.produto_id);
-        setFavorites(userFavorites);
+
       } catch (error) {
         console.log('Erro ao buscar favoritos:', error);
-        setFavorites([]);
+
       }
       
       setCurrentUser(user);
@@ -98,7 +97,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     authService.logout();
     setIsAuthenticated(false);
     setCurrentUser(null);
-    setFavorites([]);
   };
 
   const toggleFavorite = async (productId: string) => {

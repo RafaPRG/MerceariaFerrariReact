@@ -10,7 +10,7 @@ import {
 } from "./styleProdutos";
 import { BotaoFavorito } from "../botaoFavorito/botaoFavorito";
 import { useAuth } from "../../contexts/AuthContext";
-import { productService, type Product } from "../../services/productService";
+import { productService } from "../../services/productService";
 import type { ProductProps } from "../../types/userType";
 
 import pesquisaIcon from "../../assets/images/ImagemDePesquisa.png";
