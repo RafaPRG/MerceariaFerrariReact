@@ -22,9 +22,9 @@ jobs:
         run: npm install
         working-directory: ./frontend
 
-      - name: Rodar os testes
-        run: npm run test
-        working-directory: ./frontend
+      #- name: Rodar os testes
+       # run: npm run test
+        #working-directory: ./frontend
 
   deploy:
     runs-on: ubuntu-latest

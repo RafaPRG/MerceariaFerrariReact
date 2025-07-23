@@ -35,12 +35,17 @@ export function Login() {
     }
   }, [isAuthenticated, navigate]);
 
-  const handleLogin = () => {
-    const success = login(email, password);
-    if (success) {
-      navigate("/Produtos");
-    } else {
-      setError("E-mail ou senha inválidos.");
+  const handleLogin = async () => {
+    setError("");
+    try {
+      const success = await login(email, password);
+      if (success) {
+        navigate("/Produtos");
+      } else {
+        setError("E-mail ou senha inválidos.");
+      }
+    } catch (error) {
+      setError("Erro ao fazer login. Tente novamente.");
     }
   };
 

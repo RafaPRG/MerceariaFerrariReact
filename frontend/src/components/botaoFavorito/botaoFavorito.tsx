@@ -10,8 +10,16 @@ export function BotaoFavorito({ productId }: BotaoFavoritoProps) {
 
   const favoritado = isFavorite(productId);
 
+  const handleToggleFavorite = async () => {
+    try {
+      await toggleFavorite(productId);
+    } catch (error) {
+      console.error('Erro ao alterar favorito:', error);
+    }
+  };
+
   return (
-    <FavoriteButton onClick={() => toggleFavorite(productId)} $favoritado={favoritado}>
+    <FavoriteButton onClick={handleToggleFavorite} $favoritado={favoritado}>
       {favoritado ? "★" : "☆"}
     </FavoriteButton>
   );

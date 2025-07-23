@@ -1,7 +1,7 @@
 // src/pages/RecuperarSenha.tsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { mockUsers } from "../mocks/userMock";
+import { passwordService } from "../services/passwordService";
 import {
   Container,
   Form,
@@ -18,18 +18,31 @@ export function RecuperarSenha() {
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setMessage("");
 
-    const user = mockUsers.find((u) => u.email === email);
-    if (user) {
-      user.password = newPassword;
+    try {
+      await passwordService.updatePassword({
+        email,
+        new_password: newPassword,
+      });
+      
       setMessage("Senha redefinida com sucesso!");
       setTimeout(() => navigate("/login"), 2000);
-    } else {
-      setMessage("E-mail não encontrado.");
+    } catch (error: any) {
+      console.error('Erro ao redefinir senha:', error);
+      if (error.response?.status === 400) {
+        setMessage("E-mail não encontrado ou erro na validação.");
+      } else {
+        setMessage("Erro ao redefinir senha. Tente novamente.");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -46,6 +59,7 @@ export function RecuperarSenha() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            disabled={loading}
           />
         </Fieldset>
 
@@ -57,10 +71,14 @@ export function RecuperarSenha() {
             required
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
+            disabled={loading}
+            minLength={6}
           />
         </Fieldset>
 
-        <Button type="submit">Redefinir Senha</Button>
+        <Button type="submit" disabled={loading}>
+          {loading ? "Redefinindo..." : "Redefinir Senha"}
+        </Button>
         {message && <Message>{message}</Message>}
         <BackLink to="/login">← Voltar ao login</BackLink>
       </Form>

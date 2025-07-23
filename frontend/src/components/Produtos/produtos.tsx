@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "../Header/Header";
 import { Footer } from "../Footer/Footer";
 import {
@@ -10,10 +10,13 @@ import {
 } from "./styleProdutos";
 import { BotaoFavorito } from "../botaoFavorito/botaoFavorito";
 import { useAuth } from "../../contexts/AuthContext";
+import { productService, type Product } from "../../services/productService";
+import type { ProductProps } from "../../types/userType";
 
 import pesquisaIcon from "../../assets/images/ImagemDePesquisa.png";
 import filtroIcon from "../../assets/images/filtro.png";
 
+// Imagens de fallback para produtos sem imagem
 import arroz from "../../assets/images/ArrozCoripilVerde.png";
 import feijao from "../../assets/images/FeijaoCamil.png";
 import milho from "../../assets/images/LataDeMilhoOle.png";
@@ -23,33 +26,85 @@ import brahma from "../../assets/images/BrhmaLatão.png";
 import heineken from "../../assets/images/HainikenGarrafa.png";
 import doritos from "../../assets/images/Doritos.png";
 
-const produtos = [
-  { id: "1", nome: "Arroz Coripil Tipo 1 5kg", preco: "R$ 26,30", imagem: arroz },
-  { id: "2", nome: "Feijão Camil 1kg", preco: "R$ 7,00", imagem: feijao },
-  { id: "3", nome: "Milho Verde em Lata OLÉ", preco: "R$ 4,69", imagem: milho },
-  { id: "4", nome: "Leite Condensado Italac 395g", preco: "R$ 7,71", imagem: leite },
-  { id: "5", nome: "Requeijão Vigor 200g", preco: "R$ 6,99", imagem: requeijao },
-  { id: "6", nome: "Latão Brahma Chopp 473ml", preco: "R$ 5,99", imagem: brahma },
-  { id: "7", nome: "Long Neck Heineken 330ml", preco: "R$ 7,00", imagem: heineken },
-  ...Array(8).fill(null).map((_, i) => ({
-    id: `doritos-${i}`,
-    nome: "Doritos ElmaChips 84g",
-    preco: "R$ 9,00",
-    imagem: doritos,
-  })),
-];
+const fallbackImages = [arroz, feijao, milho, leite, requeijao, brahma, heineken, doritos];
 
 export function Produtos() {
-  const { currentUser } = useAuth();
+  const { currentUser, loading: authLoading } = useAuth();
   const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
+  const [produtos, setProdutos] = useState<ProductProps[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const data = await productService.getAllProducts();
+        // Mapear produtos do backend para o formato esperado pelo frontend
+        const mappedProducts = data.map((product, index) => ({
+          id: product.id,
+          nome: product.nome,
+          preco: product.preco,
+          categoria: product.categoria,
+          descricao: product.descricao,
+          imagem_url: product.imagem_url || fallbackImages[index % fallbackImages.length]
+        }));
+        setProdutos(mappedProducts);
+      } catch (error) {
+        console.error('Erro ao buscar produtos:', error);
+        setError('Erro ao carregar produtos');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (!authLoading) {
+      fetchProducts();
+    }
+  }, [authLoading]);
 
   const toggleShowFavorites = () => {
     setShowOnlyFavorites((prev) => !prev);
   };
 
   const produtosFiltrados = showOnlyFavorites && currentUser
-    ? produtos.filter((produto) => currentUser.favorites.includes(produto.id))
+    ? produtos.filter((produto) => currentUser.favorites?.includes(produto.id))
     : produtos;
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(price);
+  };
+
+  if (loading || authLoading) {
+    return (
+      <>
+        <Header />
+        <Main>
+          <div style={{ textAlign: 'center', padding: '2rem' }}>
+            Carregando produtos...
+          </div>
+        </Main>
+        <Footer />
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <Header />
+        <Main>
+          <div style={{ textAlign: 'center', padding: '2rem', color: 'red' }}>
+            {error}
+          </div>
+        </Main>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
@@ -77,12 +132,26 @@ export function Produtos() {
           {produtosFiltrados.map((produto) => (
             <ProductCard key={produto.id}>
               <BotaoFavorito productId={produto.id} />
-              <img src={produto.imagem} alt={produto.nome} />
+              <img 
+                src={typeof produto.imagem_url === 'string' ? produto.imagem_url : produto.imagem_url} 
+                alt={produto.nome} 
+                onError={(e) => {
+                  // Fallback para imagem padrão se a imagem não carregar
+                  const target = e.target as HTMLImageElement;
+                  target.src = fallbackImages[0];
+                }}
+              />
               <p>{produto.nome}</p>
-              <p>{produto.preco}</p>
+              <p>{formatPrice(produto.preco)}</p>
             </ProductCard>
           ))}
         </ProductGrid>
+
+        {produtosFiltrados.length === 0 && (
+          <div style={{ textAlign: 'center', padding: '2rem' }}>
+            {showOnlyFavorites ? 'Nenhum produto favorito encontrado.' : 'Nenhum produto encontrado.'}
+          </div>
+        )}
       </Main>
 
       <Footer />
